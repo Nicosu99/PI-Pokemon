@@ -1,16 +1,12 @@
-const { Router } = require ('express')
+const { Router } = require ('express');
+const { createPokeHandler, getPokeByIdHandler, getPokeHandler } = require('../handlers/pokeHandlers');
+
 const pokeRoutes = Router();
 
-pokeRoutes.get('/',(req, res)=> {
-    res.status(200).send('NIY: Esta ruta trae la info de todos los pokemones y busqueda por name')
-});
+pokeRoutes.get('/', getPokeHandler);
 
-pokeRoutes.get('/:id',(req, res) => {
-    res.status(200).send('Estoy en Pokemons by id')
-})
+pokeRoutes.get('/:id',getPokeByIdHandler);
 
-pokeRoutes.post ('/' ,(req,res) => {
-    res.status(200).send('Estoy en post pokemon')
-})
+pokeRoutes.post ('/' , createPokeHandler);
 
 module.exports = pokeRoutes;

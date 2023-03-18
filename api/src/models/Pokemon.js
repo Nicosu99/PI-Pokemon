@@ -6,17 +6,20 @@ function pokeModel(sequelize){
     'Pokemon', {
 
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         allowNull:false,
         primaryKey: true,
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       image: {
         type: DataTypes.STRING,
         allowNull: false,
+        
       },
       hp: {
         type: DataTypes.INTEGER,
@@ -46,7 +49,8 @@ function pokeModel(sequelize){
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-    }
+    },
+    {timestamps: false }
   )
 }
 
