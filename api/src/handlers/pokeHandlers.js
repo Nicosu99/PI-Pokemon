@@ -1,3 +1,5 @@
+const { newPoke, createPoke } = require ('../controllers/pokeControllers/createPoke') 
+
 const getPokeHandler = (req, res) => {
     const {name} = req.query;
     if(name) res.send (`Quiero traer todos los que se llamen ${name}`);
@@ -34,15 +36,16 @@ const createPokeHandler = async (req, res) => {
          ) {
             throw new Error ('Faltan llenar datos')
          }
-         const nuevoPoke = await newPoke (
+         const nuevoPoke = await createPoke (
             name,
-            hp,
             image,
+            hp,
             attack,
             defense,
             speed,
             height,
             weight,
+            types,
          )
          res.status(200).json(nuevoPoke)
          

@@ -10,6 +10,9 @@ const createPoke = async (
     height,
     weight,
 ) => {
+    let findPoke = await Pokemon.findOne({where: {name: name}})
+    if (findPoke) {throw new Error(`Ya existe un Pokemon con el nombre ${name}`)}
+
     const newPoke = await Pokemon.create({
         name: name,
         image: image ? image : 'https://w7.pngwing.com/pngs/248/960/png-transparent-pikachu-pokemon-go-silhouette-drawing-pikachu-dog-like-mammal-fictional-character-black.png',
@@ -20,6 +23,7 @@ const createPoke = async (
         height: height,
         weight: weight,      
     })
+    return `Felicidades! Se creo un Pokemon con el nombre: ${name}!`
 };
 
 module.exports = {createPoke}
