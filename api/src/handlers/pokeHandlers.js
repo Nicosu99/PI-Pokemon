@@ -1,14 +1,26 @@
-const { newPoke, createPoke } = require ('../controllers/pokeControllers/createPoke') 
+const { createPoke } = require ('../controllers/pokeControllers/createPoke') 
+const { getPokeById } = require ('../controllers/pokeControllers/getPokeById'); 
+const getPokemonsApi = require('../controllers/pokeControllers/getPokemonsApi');
 
 const getPokeHandler = (req, res) => {
     const {name} = req.query;
     if(name) res.send (`Quiero traer todos los que se llamen ${name}`);
-    else res.send ('Quiero traer todos los usuarios')
+    else res.status(200).json(getPokemonsApi)
 }
 
-const getPokeByIdHandler = (req, res) => {
+const getPokeByIdHandler = async (req, res) => {
     const {id} = req.params
-    res.send (`NIY: Esta ruta trae la info del pokemon buscado por params.id con el id "${id}"`);
+    const source = isNaN(id) ? 'bdd' : 'api' ;
+    /* VERIFICO QUE TIPO DE ID ME ESTA LLEGANDO
+    Si el id es Nan, significa que viene de la bdd, pues es un UUIDv4
+    Si el id es un numero, tengo que buscar en la api, pues tienen id por numerito
+    Jorge, si tengo el agrado de que estes viendo esto, TE AMO <3 */
+   try {
+        const pokeById = await getPokeById(id, source);
+        res.status(200).json(getPokeById)
+   } catch (error) {
+    res.status(400).json({error: error.message})   
+}
 }
 
 const createPokeHandler = async (req, res) => {
@@ -22,7 +34,8 @@ const createPokeHandler = async (req, res) => {
         height,
         weight,
         types, //?
-    }  = req.body;
+    }  = req.body; 
+    /* ME TRAIGO LA INFO DE REQ.BODY */
     try {
         if(
             !name ||
@@ -48,7 +61,7 @@ const createPokeHandler = async (req, res) => {
             types,
          )
          res.status(200).json(nuevoPoke)
-         
+         /* LLAMO A UNA FUNCION QUE CREE AL POKE Y NO SE HACE ACA POR UN TEMA DE RESPONSABILIDADES */
     } catch (error) {
         res.status(400).json({error: error.message})
         

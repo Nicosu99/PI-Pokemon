@@ -22,6 +22,7 @@ const getPokemonsApi = async (url = `https://pokeapi.com/api/v2/pokemon`) => {
             pokemon.types = url.data.types.map((el) => el.type.name);
             pokemon.image = url.data.sprites.other['official-artwork'].front_default;
             pokemon.created = false;
+            console.log('No se que paso aki');
             // FALTA TRAER IMAGEN EN MOVIMIENTO PARA LAS ESTADISTICAS DEL POKE
         }
         return allPokeApi;

@@ -23,6 +23,7 @@ const createPoke = async (
         height: height,
         weight: weight,      
     })
+    console.log(newPoke)
     return `Felicidades! Se creo un Pokemon con el nombre: ${name}!`
 };
 
