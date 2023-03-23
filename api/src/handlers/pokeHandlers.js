@@ -18,7 +18,7 @@ const getPokeHandler = async (req, res) => {
 				res.status(200).json(pokemonName);
 			}
 		} else {
-			let allPokemons = await allPokeData();
+			let allPokemons = await getAllPokes();
 
 			if (allPokemons.error) {
 				throw new Error(allPokemons.error);
@@ -30,22 +30,12 @@ const getPokeHandler = async (req, res) => {
 		res.status(400).json({ error: error.message });
 	}
 
-
-
-
-
-
     // try {
     //     const results = name ? await getPokeByName : await getAllPokes();
     //     res.status(200).json(results)
     // } catch (error) {
         
     // }
-
-
-
-
-
 
     // try {
     //     if (name) {
