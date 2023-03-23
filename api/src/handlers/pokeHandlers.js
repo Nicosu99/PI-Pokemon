@@ -1,11 +1,61 @@
 const { createPoke } = require ('../controllers/pokeControllers/createPoke') 
 const { getPokeById } = require ('../controllers/pokeControllers/getPokeById'); 
-const getPokemonsApi = require('../controllers/pokeControllers/getPokemonsApi');
+const { getPokeByName } = require ('../controllers/pokeControllers/getPokeByName');
+const { getPokemonsApi } = require('../controllers/pokeControllers/getPokemonsApi');
+const { getPokemonsBdd } = require('../controllers/pokeControllers/getPokemonsBdd');
+const { getAllPokes } = require ('../controllers/pokeControllers/getAllPokes')
 
-const getPokeHandler = (req, res) => {
-    const {name} = req.query;
-    if(name) res.send (`Quiero traer todos los que se llamen ${name}`);
-    else res.status(200).json(getPokemonsApi)
+const getPokeHandler = async (req, res) => {
+     const {name} = req.query;
+
+     try {
+		if (name) {
+			let pokemonName = await getPokeByName(name.toLowerCase());
+
+			if (pokemonName.error) {
+				throw new Error(pokemonName.error);
+			} else {
+				res.status(200).json(pokemonName);
+			}
+		} else {
+			let allPokemons = await allPokeData();
+
+			if (allPokemons.error) {
+				throw new Error(allPokemons.error);
+			} else {
+				res.status(200).json(allPokemons);
+			}
+		}
+	} catch (error) {
+		res.status(400).json({ error: error.message });
+	}
+
+
+
+
+
+
+    // try {
+    //     const results = name ? await getPokeByName : await getAllPokes();
+    //     res.status(200).json(results)
+    // } catch (error) {
+        
+    // }
+
+
+
+
+
+
+    // try {
+    //     if (name) {
+    //         res.status(200).send (`Quiero traer todos los que se llamen ${name}`);
+    //     } else {
+    //         res.status(200).json ( 'Holi')
+    //     }
+    // } catch (error) {
+    //     res.status(400).json({error: error.message})
+    // }
 }
 
 const getPokeByIdHandler = async (req, res) => {
@@ -17,7 +67,7 @@ const getPokeByIdHandler = async (req, res) => {
     Jorge, si tengo el agrado de que estes viendo esto, TE AMO <3 */
    try {
         const pokeById = await getPokeById(id, source);
-        res.status(200).json(getPokeById)
+        res.status(200).json(pokeById)
    } catch (error) {
     res.status(400).json({error: error.message})   
 }
