@@ -4,8 +4,16 @@ const {Pokemon, Type } = require('../../db');
 const getPokeByName = async (name) => {
     try {
         const bddPoke = await Pokemon.findOne({
-            where: {name: name}
-        }) 
+            where: {
+                name: name
+            },
+            include: {
+                model: Type,
+                attributes: ['name'],
+                through: { types:[] },
+            },
+        });
+
         if(bddPoke) {
             return {
                 id: bddPoke.id,
@@ -17,6 +25,7 @@ const getPokeByName = async (name) => {
                 height: bddPoke.height,
                 weight: bddPoke.weight,
                 image: bddPoke.image,
+                types: bddPoke.Types.map((type) => type.name),
                 created: bddPoke.created,
             }
         }
@@ -32,7 +41,7 @@ const getPokeByName = async (name) => {
 				attack: pokemon.stats[1].base_stat,
 				defense: pokemon.stats[2].base_stat,
 				speed: pokemon.stats[5].base_stat,
-				types: pokemon.types.map((el) => el.type.name),
+				types: pokemon.types.map((t) => t.type.name),
 				image: pokemon.sprites.other['official-artwork'].front_default,
 				created: false,
 			};

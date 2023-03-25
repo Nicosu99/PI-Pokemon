@@ -6,8 +6,15 @@ const getPokeById = async (id, source) => {
     try {
         if (source === 'bdd'){
             const idBdd = await Pokemon.findOne({
-                where: {id: id}
-            })
+                where: {id: id},
+                include: {
+                    model: Type,
+                    attributes: ['name'],
+                    through: {
+                        types: [], 
+                    },
+                },
+            });
             if (idBdd) {
                 return {
                     id: idBdd.id,
@@ -19,6 +26,7 @@ const getPokeById = async (id, source) => {
                     height: idBdd.height,
                     weight: idBdd.weight,
                     image: idBdd.image,
+                    types: idBdd.Types.map((type) => type.name),
                     created: idBdd.created,
                 }
             }  
@@ -36,12 +44,13 @@ const getPokeById = async (id, source) => {
 					defense: pokemon.stats[2].base_stat,
 					speed: pokemon.stats[5].base_stat,
 					image: pokemon.sprites.other['official-artwork'].front_default,
+                    types: pokemon.types.map((t) => t.type.name),
                     created: false,
                 }
                 return pokeId
             }
         }
-    } catch (error) {throw new Error("Algo no funco" )}
+    } catch (error) {throw new Error("Pokemon no encontrado")}
 
 }
 module.exports = {getPokeById}

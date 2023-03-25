@@ -9,6 +9,7 @@ const createPoke = async (
     speed,
     height,
     weight,
+    types,
 ) => {
     let findPoke = await Pokemon.findOne({where: {name: name}})
     if (findPoke) {throw new Error(`Ya existe un Pokemon con el nombre ${name}`)}
@@ -22,9 +23,12 @@ const createPoke = async (
         speed: speed,
         height: height,
         weight: weight,      
-    })
-    console.log(newPoke)
-    return `Felicidades! Se creo un Pokemon con el nombre: ${name}!`
+    });
+    
+    const pokeTypes = await Type.findAll({ where: {name: types} })
+    await newPoke.addType(pokeTypes);
+
+    return (newPoke)//`Felicidades! Se creo un Pokemon con el nombre: ${name}!`
 };
 
 module.exports = {createPoke}
