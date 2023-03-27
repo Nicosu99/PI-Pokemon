@@ -1,0 +1,9 @@
+.container{
+    border: 2px solid black;
+    display: flex;
+    flex-direction: row;
+    border-radius: 15px;
+    flex-wrap: wrap;
+    margin: 3px;
+    justify-content:space-between;
+}
