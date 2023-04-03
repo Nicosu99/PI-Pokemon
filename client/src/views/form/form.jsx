@@ -9,8 +9,9 @@ const Form = ()=> {
 
     const dispatch = useDispatch();
 	let allTypes = useSelector((state) => state.types).filter(
-		(el) => el.name !== 'unknown',
-    ) 
+		(el) => el.name !== 'unknown',) 
+    let pokemons = useSelector((state) => state.pokemons);
+
     const [form, setForm] = useState({
         name:"",
         image:"",
@@ -49,11 +50,15 @@ const Form = ()=> {
 
     const submitHandler = (event) => {
         event.preventDefault()
+        let pokeName = pokemons.find(
+            (el) => el.name === form.name.trim().toLocaleLowerCase(),)
+        if (pokeName){
+            return alert ('Ya existe un Pokemon con ese nombre')}
+        
         dispatch(newPoke(form))
-        .then(res=>alert(res))
-        .catch(err=>alert(err))
+        .then(res=>alert('Pokemon successfully created'))
     }
-
+    
     return (
         <form onSubmit={(event) => submitHandler(event)}>
             <div>
@@ -147,15 +152,11 @@ const Form = ()=> {
                 <span>{errors.types}</span>
             </div>
             <div>
-								<button id="button" type="submit">
-									<span></span>
-									Create Pokemon
-								</button>
-                                <Link to="/home">
-                                <span></span>
-									Back to home
-                                </Link>
-							</div>
+			    <button id="button" type="submit">
+				<span></span>
+				Create Pokemon
+				</button>
+			</div>
         </form>
         
     )

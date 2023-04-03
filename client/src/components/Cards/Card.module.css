@@ -7,4 +7,6 @@
 
 .card img {
     width: 90%;
+    max-width: 218px;
+    max-height: 218px;
 }

@@ -4,7 +4,7 @@ export const GET_POKEMONS = "GET_POKEMONS";
 export const GET_POKE = "GET_POKE";
 export const RESET_STATE = "RESET_STATE";
 export const GET_ALL_TYPES = "GET_ALL_TYPES";
-export const HANDLER_TYPES = "HANDLER_TYPES";
+export const FILTER_BY_TYPE = "FILTER_BY_TYPE";
 export const HANDLER_SOURCE = "HANDLER_SOURCE";
 export const ORDER = "ORDER";
 export const EMPTY = "EMPTY";
@@ -22,15 +22,25 @@ export const getPokemons = () => {
 
 export const getPoke = (id) => {
     return async function(dispatch){
-        const apiData = await axios.get(
+        let pokemon = await axios.get(
             `http://localhost:3001/pokemons/${id}`
         );
-        const pokemon = apiData.data;
-        dispatch({type: GET_POKE, payload: pokemon});
+        return dispatch({
+            type: GET_POKE,
+            payload: pokemon.data
+        })
     };
 };
 
-export const getByName = (name) => {
+export const filterByType = (payload) => {
+    console.log(payload)
+    return {
+        type: FILTER_BY_TYPE,
+        payload
+    }
+}
+
+export const getPokeByName = (name) => {
     return {
         type: GET_NAME,
         payload: name,
@@ -43,10 +53,24 @@ export const resetState = () => {
     }
 }
 
-export const order = (order) => {
+export const order = (payload) => {
     return {
         type: ORDER,
-        payload: order
+        payload
+    }
+}
+
+export const orderAtk = (payload) => {
+    return {
+        type: 'ORDER_BY_ATK',
+        payload
+    }
+}
+
+export const orderName = (payload) => {
+    return {
+        type: 'ORDER_BY_NAME',
+        payload
     }
 }
 
@@ -73,14 +97,7 @@ export const getTypes = () => {
     }
 }
 
-export const handlerTypes = (type) => {
-    return {
-        type: HANDLER_TYPES,
-        payload: type
-    }
-}
-
-export const handlerSource = (source) => {
+export const filterBySource = (source) => {
     return {
         type: HANDLER_SOURCE,
         payload: source

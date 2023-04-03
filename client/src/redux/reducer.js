@@ -1,4 +1,4 @@
-import { GET_POKE, GET_POKEMONS, RESET_STATE, GET_ALL_TYPES, GET_NAME, HANDLER_TYPES, HANDLER_SOURCE, ORDER, EMPTY } from "./actions";
+import { GET_POKE, GET_POKEMONS, RESET_STATE, GET_ALL_TYPES, GET_NAME, FILTER_BY_TYPE, HANDLER_SOURCE, ORDER, EMPTY } from "./actions";
 
 const initialState ={
     pokemons: [],
@@ -44,11 +44,11 @@ const rootReducer = (state= initialState, action)=> {
                 pokemons: name
             };
 
-        case HANDLER_TYPES:
+        case FILTER_BY_TYPE:
             const type =
-                action.payload === 'all'
+                action.payload === 'All'
                     ? state.pokes
-                    : state.pokes?.filter((el) => el.types?.includes(action.payload))
+                    : state.pokes?.filter((el) => el.types === action.payload)
             return{
                 ...state,
                 pokemons: type
@@ -79,28 +79,41 @@ const rootReducer = (state= initialState, action)=> {
             };
 
         
-        case ORDER:
-            let sort = action.payload;
-            let newOrder = state.pokemons;
+            case 'ORDER_BY_NAME':
+                let order = action.payload === 'asc' ?
+                    state.pokemons.sort((a,b) => {
+                        if(a.name > b.name) return 1;
+                        if(b.name > a.name) return -1;
+                        return 0;
+                    }) :
+                    state.pokemons.sort((a,b) => {
+                        if(a.name > b.name) return -1;
+                        if(b.name > a.name) return 1;
+                        return 0;
+                    })
+                return{
+                    ...state,
+                    pokemons: order
+                };
+    
+            case 'ORDER_BY_ATK':
+                let atkOrder = action.payload === '-ATK' ?
+                    state.pokemons.sort((a,b) => {
+                        if(a.attack > b.attack) return 1;
+                        if(b.attack > a.attack) return -1;
+                        return 0;
+                    }) :
+                    state.pokemons.sort((a,b) => {
+                        if(a.attack > b.attack) return -1;
+                        if(b.attack > a.attack) return 1;
+                        return 0;
+                    })
+                return{
+                    ...state,
+                    allPokemons: atkOrder
+                 };
 
-            if (sort === 'ascendente' || sort === 'descendente') {
-                sort === 'ascendente'
-                    ? newOrder.sort((a, b) => a.id2 - b.id2)
-                    : newOrder.sort((a, b) => b.id2 - a.id2);
-            } else if(sort === 'a_z' || sort === "z_a") {
-                sort === 'a_z'
-                    ? newOrder.sort((a, b) => a.name.localeCompare(b.name))
-					: newOrder.sort((a, b) => b.name.localeCompare(a.name));
-			} else if (sort === 'major_attack' || sort === 'minor_attack') {
-				sort === 'major_attack'
-					? newOrder.sort((a, b) => a.attack - b.attack)
-					: newOrder.sort((a, b) => b.attack - a.attack);
-            }
 
-            return{
-                ...state,
-                pokemons: newOrder
-            };
 
         default:
             return{...state};

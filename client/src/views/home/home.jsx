@@ -14,7 +14,7 @@ const Home = ()=> {
 
     return (
         <>
-            <h1>Estos son mis Pokemones perrito</h1>
+            <h1>Estos son los Pokemones</h1>
             <CardsContainer />
         </>
     )

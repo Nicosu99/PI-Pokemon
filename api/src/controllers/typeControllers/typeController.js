@@ -11,9 +11,9 @@ const pokeType = async () => {
             types = getTypes.data.results;
 
             for(let type of types){
-                let info = await axios.get(type.info);
-                delete type.info;
-                type.id = info.data.id
+                let url = await axios.get(type.url);
+                delete type.url;
+                type.id = url.data.id
             }
 
             await Type.bulkCreate(types)
